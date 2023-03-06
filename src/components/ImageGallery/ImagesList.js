@@ -1,62 +1,84 @@
+import React, { Component } from 'react';
+import imagesApi from 'services/ApiService';
+import { ImagesGallery } from './ImagesGallery.styled';
 import Spiner from 'components/Loader/Loader';
-import { Component } from 'react';
-import { getImages } from 'services/ApiService';
-import { ImageGalleryItem } from '../ImageGalleryItem/ImageItem';
-import { ImageGallery } from './ImagesGallery.styled';
+import ImageGalleryItem from 'components/ImageGalleryItem/ImageItem';
 
-class ImagesGallery extends Component {
+class ImageGallery extends Component {
   state = {
     fotos: null,
     error: null,
     status: 'idle',
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  static defaultProps = { page: 1 };
+
+  async componentDidUpdate(prevProps, prevState) {
+    const searchValue = this.props.searchValue;
+    const pageNumber = this.props.page;
+
+    if (prevProps.searchValue !== this.props.searchValue) {
+      this.setState({ status: 'pending' });
+
+      imagesApi
+        .fetchImages(searchValue, pageNumber)
+        .then(data => this.setState({ fotos: data.hits, status: 'resolved' }))
+        .catch(error => this.setState({ error, status: 'rejected' }));
+
+      this.props.onAddFotos();
+    }
+
     if (
-      prevProps.value !== this.props.value ||
-      prevState.page !== this.state.page
+      prevProps.searchValue === this.props.searchValue &&
+      this.props.page !== prevProps.page
     ) {
       this.setState({ status: 'pending' });
 
-      getImages(this.props.value)
-        .then(response => response.json())
-        .then(data => {
-          //   if (fotos.status !== 'ok') {
-          //     return Promise.reject(fotos.error);
-          //   }
-          this.setState({ fotos: data.hits, status: 'resolved' });
-        })
-        .catch(error => {
-          this.setState({ error, status: 'rejected' });
-        });
+      await imagesApi
+        .fetchImages(searchValue, pageNumber)
+        .then(data =>
+          this.setState({
+            fotos: [...prevState.fotos, ...data.hits],
+            status: 'resolved',
+          })
+        )
+        .catch(error => this.setState({ error, status: 'rejected' }));
+
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth',
+      });
+      this.props.onAddFotos();
     }
   }
 
   render() {
-    const { status, fotos, error } = this.state;
-    if (this.state.status === 'pending') {
+    const { error, fotos, status } = this.state;
+
+    if (status === 'pending') {
       return <Spiner />;
+    }
+
+    if (status === 'rejected') {
+      return <h2>{error.message}</h2>;
     }
 
     if (status === 'resolved') {
       return (
-        <ImageGallery>
+        <ImagesGallery>
           {fotos &&
             fotos.map(photo => (
               <ImageGalleryItem
                 key={photo.id}
-                src={photo.webformatURL}
-                alt={photo.tags}
+                src={photo.largeImageURL}
+                alt={photo.id}
                 onClick={this.props.onImageClick}
               />
             ))}
-        </ImageGallery>
+        </ImagesGallery>
       );
-    }
-
-    if (status === 'rejected') {
-      return <h2>{error}</h2>;
     }
   }
 }
-export default ImagesGallery;
+
+export default ImageGallery;

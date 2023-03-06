@@ -1,46 +1,50 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import {
-  Searchbar,
+  SearchBar,
   Form,
   FormBtn,
   FormLabel,
   FormInput,
 } from './SearchBar.styled';
 
-class SearchBar extends Component {
+class Searchbar extends Component {
   state = {
-    value: '',
+    searchValue: '',
   };
 
-  handleChange = ({ target: { value } }) => {
-    this.setState({ value });
+  handleNameChange = event => {
+    this.setState({ searchValue: event.currentTarget.value.toLowerCase() });
   };
 
-  handleSubmit = evt => {
-    evt.preventDefault();
-    this.props.onSearch(this.state.value);
-    this.setState({ value: '' });
+  handleSubmit = event => {
+    event.preventDefault();
+    if (this.state.searchValue.trim() === '') {
+      return alert('Enter something!');
+    }
+    this.props.onSubmit(this.state.searchValue);
+    this.setState({ searchValue: '' });
   };
 
   render() {
     return (
-      <Searchbar>
+      <SearchBar>
         <Form onSubmit={this.handleSubmit}>
           <FormBtn type="submit">
             <FormLabel>Search</FormLabel>
           </FormBtn>
+
           <FormInput
             type="text"
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
-            value={this.state.value}
-            onChange={this.handleChange}
+            value={this.state.searchValue}
+            onChange={this.handleNameChange}
           />
         </Form>
-      </Searchbar>
+      </SearchBar>
     );
   }
 }
 
-export default SearchBar;
+export default Searchbar;

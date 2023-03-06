@@ -1,3 +1,4 @@
+import React from 'react';
 import { LoadMoreButton } from './Button.styled';
 
 const Button = ({ onLoadMoreClick }) => {

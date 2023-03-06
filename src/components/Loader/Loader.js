@@ -1,8 +1,10 @@
+import React from 'react';
 import { RotatingLines } from 'react-loader-spinner';
+import { Container } from './Loader.styled';
 
 const Spiner = () => {
   return (
-    <div>
+    <Container>
       <RotatingLines
         strokeColor="grey"
         strokeWidth="5"
@@ -10,7 +12,7 @@ const Spiner = () => {
         width="96"
         visible={true}
       />
-    </div>
+    </Container>
   );
 };
 

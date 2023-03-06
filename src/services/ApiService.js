@@ -1,8 +1,35 @@
-const BASE_URL = 'https://pixabay.com/api/';
-const API_KEY = '33163433-7381312326b7cb4a7310bb1a7';
+// function fetchImages(searchValue, pageNumber) {
+//   const perPage = 12;
+//   const key = '33163433-7381312326b7cb4a7310bb1a7';
+//   const url = `https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=${searchValue}&page=${pageNumber}&per_page=${perPage}&key=${key}`;
+//   return fetch(url).then(response => {
+//     if (response.ok) {
+//       return response.json();
+//     }
 
-export const getImages = (searchQuery, pageNumber) => {
-  return fetch(
-    `${BASE_URL}?q=${searchQuery}&page=${pageNumber}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
-  );
-};
+//     return Promise.reject(
+//       new Error(`Can not find images with name ${searchValue}`)
+//     );
+//   });
+// }
+
+// const imagesApi = { fetchImages };
+// export default imagesApi;
+
+function fetchImages(searchValue, pageNumber) {
+  const perPage = 12;
+  const key = '33163433-7381312326b7cb4a7310bb1a7';
+  const url = `https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=${searchValue}&page=${pageNumber}&per_page=${perPage}&key=${key}`;
+  return fetch(url).then(response => {
+    if (response.ok) {
+      return response.json();
+    }
+
+    return Promise.reject(
+      new Error(`Can not find images with name ${searchValue}`)
+    );
+  });
+}
+
+const imagesApi = { fetchImages };
+export default imagesApi;
