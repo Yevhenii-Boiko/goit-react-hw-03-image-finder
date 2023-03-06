@@ -48,15 +48,15 @@ export const FormBtn = styled.button`
 `;
 
 export const FormLabel = styled.span`
-  position: absolute;
+  /* position: absolute; */
   width: 1px;
   height: 1px;
   padding: 0;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
-  clip-path: inset(50%);
-  border: 0;
+  /* clip-path: inset(50%); */
+  border: 1;
 `;
 
 export const FormInput = styled.input`
