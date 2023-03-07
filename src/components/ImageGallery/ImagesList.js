@@ -3,7 +3,6 @@ import imagesApi from 'services/ApiService';
 import { ImagesGallery, Message } from './ImagesGallery.styled';
 import Spiner from 'components/Loader/Loader';
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageItem';
-// import { Container } from 'components/Loader/Loader.styled';
 
 class ImageGallery extends Component {
   state = {
@@ -11,8 +10,6 @@ class ImageGallery extends Component {
     error: null,
     status: 'idle',
   };
-
-  static defaultProps = { page: 1 };
 
   async componentDidUpdate(prevProps, prevState) {
     const searchValue = this.props.searchValue;
