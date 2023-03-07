@@ -12,3 +12,7 @@ export const ImagesGallery = styled.ul`
   margin-left: auto;
   margin-right: auto;
 `;
+
+export const Message = styled.h2`
+  text-align: center;
+`;

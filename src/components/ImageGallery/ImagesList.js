@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import imagesApi from 'services/ApiService';
-import { ImagesGallery } from './ImagesGallery.styled';
+import { ImagesGallery, Message } from './ImagesGallery.styled';
 import Spiner from 'components/Loader/Loader';
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageItem';
+// import { Container } from 'components/Loader/Loader.styled';
 
 class ImageGallery extends Component {
   state = {
@@ -44,10 +45,6 @@ class ImageGallery extends Component {
         )
         .catch(error => this.setState({ error, status: 'rejected' }));
 
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: 'smooth',
-      });
       this.props.onAddFotos();
     }
   }
@@ -65,17 +62,24 @@ class ImageGallery extends Component {
 
     if (status === 'resolved') {
       return (
-        <ImagesGallery>
-          {fotos &&
-            fotos.map(photo => (
-              <ImageGalleryItem
-                key={photo.id}
-                src={photo.largeImageURL}
-                alt={photo.id}
-                onClick={this.props.onImageClick}
-              />
-            ))}
-        </ImagesGallery>
+        <div>
+          <ImagesGallery>
+            {fotos < 1 && (
+              <Message>
+                Can not find images with name {this.props.searchValue}...
+              </Message>
+            )}
+            {fotos &&
+              fotos.map(photo => (
+                <ImageGalleryItem
+                  key={photo.id}
+                  src={photo.largeImageURL}
+                  alt={photo.id}
+                  onClick={this.props.onImageClick}
+                />
+              ))}
+          </ImagesGallery>
+        </div>
       );
     }
   }

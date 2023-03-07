@@ -6,10 +6,7 @@ function fetchImages(searchValue, pageNumber) {
     if (response.ok) {
       return response.json();
     }
-
-    return Promise.reject(
-      new Error(`Can not find images with name ${searchValue}`)
-    );
+    return Promise.reject(new Error(response.statusText));
   });
 }
 
