@@ -60,12 +60,14 @@ class ImageGallery extends Component {
     if (status === 'resolved') {
       return (
         <div>
-          <ImagesGallery>
+          <div>
             {fotos < 1 && (
               <Message>
                 Can not find images with name {this.props.searchValue}...
               </Message>
             )}
+          </div>
+          <ImagesGallery>
             {fotos &&
               fotos.map(photo => (
                 <ImageGalleryItem
