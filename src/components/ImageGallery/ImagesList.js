@@ -30,7 +30,7 @@ class ImageGallery extends Component {
       prevProps.searchValue === this.props.searchValue &&
       this.props.page !== prevProps.page
     ) {
-      this.setState({ status: 'pending' });
+      // this.setState({ status: 'pending' });
 
       await imagesApi
         .fetchImages(searchValue, pageNumber)
@@ -68,15 +68,14 @@ class ImageGallery extends Component {
             )}
           </div>
           <ImagesGallery>
-            {fotos &&
-              fotos.map(photo => (
-                <ImageGalleryItem
-                  key={photo.id}
-                  src={photo.largeImageURL}
-                  alt={photo.id}
-                  onClick={this.props.onImageClick}
-                />
-              ))}
+            {fotos?.map(photo => (
+              <ImageGalleryItem
+                key={photo.id}
+                src={photo.largeImageURL}
+                alt={photo.id}
+                onClick={this.props.onImageClick}
+              />
+            ))}
           </ImagesGallery>
         </div>
       );

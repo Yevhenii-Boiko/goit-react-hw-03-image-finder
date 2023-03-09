@@ -51,7 +51,6 @@ class App extends Component {
       <Layout>
         <GlobalStyle />
         <SearchBar onSubmit={this.handleFormSubmit} />
-
         <ImageGallery
           searchValue={searchValue}
           page={page}
