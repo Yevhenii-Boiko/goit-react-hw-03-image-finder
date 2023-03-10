@@ -1,10 +1,13 @@
 import styled from 'styled-components';
 
+export const BtnContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 export const LoadMoreButton = styled.button`
   padding: 8px 16px;
   width: 200px;
-  margin-left: auto;
-  margin-right: auto;
   border-radius: 2px;
   background-color: #3f51b5;
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);

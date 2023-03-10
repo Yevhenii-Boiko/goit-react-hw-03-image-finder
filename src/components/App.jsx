@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { GlobalStyle } from 'GlobalStyle';
 import { Layout } from './Layout';
 import ImageGallery from './ImageGallery/ImagesList';
-import Button from './Button';
 import Modal from './Modal';
 import SearchBar from './SearchBar';
 
@@ -15,7 +14,6 @@ class App extends Component {
       srcLarge: '',
       altLarge: '',
     },
-    fotos: false,
   };
 
   toggleModal = event => {
@@ -35,17 +33,8 @@ class App extends Component {
     this.setState({ searchValue });
   };
 
-  loadMoreImages = () => {
-    this.setState({ page: this.state.page + 1 });
-    this.setState(prevState => ({ searchValue: prevState.searchValue }));
-  };
-
-  toggleFotos = () => {
-    this.setState({ fotos: true });
-  };
-
   render() {
-    const { searchValue, page, showModal, url, fotos } = this.state;
+    const { searchValue, page, showModal, url } = this.state;
 
     return (
       <Layout>
@@ -55,10 +44,7 @@ class App extends Component {
           searchValue={searchValue}
           page={page}
           onImageClick={this.toggleModal}
-          onAddFotos={this.toggleFotos}
         />
-
-        {fotos && <Button onLoadMoreClick={this.loadMoreImages} />}
 
         {showModal && (
           <Modal

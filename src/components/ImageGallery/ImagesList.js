@@ -1,50 +1,42 @@
 import React, { Component } from 'react';
-import imagesApi from 'services/ApiService';
 import { ImagesGallery, Message } from './ImagesGallery.styled';
 import Spiner from 'components/Loader/Loader';
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageItem';
+import Button from 'components/Button';
+import { getImages } from 'services/ApiService';
+import { BtnContainer } from 'components/Button/Button.styled';
 
 class ImageGallery extends Component {
   state = {
-    fotos: null,
+    fotos: [],
     error: null,
     status: 'idle',
+    page: 1,
   };
 
-  async componentDidUpdate(prevProps, prevState) {
-    const searchValue = this.props.searchValue;
-    const pageNumber = this.props.page;
-
-    if (prevProps.searchValue !== this.props.searchValue) {
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps.searchValue !== this.props.searchValue ||
+      prevState.page !== this.state.page
+    ) {
       this.setState({ status: 'pending' });
 
-      imagesApi
-        .fetchImages(searchValue, pageNumber)
-        .then(data => this.setState({ fotos: data.hits, status: 'resolved' }))
-        .catch(error => this.setState({ error, status: 'rejected' }));
-
-      this.props.onAddFotos();
-    }
-
-    if (
-      prevProps.searchValue === this.props.searchValue &&
-      this.props.page !== prevProps.page
-    ) {
-      // this.setState({ status: 'pending' });
-
-      await imagesApi
-        .fetchImages(searchValue, pageNumber)
-        .then(data =>
+      getImages(this.props.searchValue.trim(), this.state.page)
+        .then(response => response.json())
+        .then(data => {
           this.setState({
-            fotos: [...prevState.fotos, ...data.hits],
+            fotos: [...this.state.fotos, ...data.hits],
             status: 'resolved',
-          })
-        )
-        .catch(error => this.setState({ error, status: 'rejected' }));
-
-      this.props.onAddFotos();
+          });
+        });
     }
   }
+
+  loadMoreImages = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
+  };
 
   render() {
     const { error, fotos, status } = this.state;
@@ -67,16 +59,23 @@ class ImageGallery extends Component {
               </Message>
             )}
           </div>
-          <ImagesGallery>
-            {fotos?.map(photo => (
-              <ImageGalleryItem
-                key={photo.id}
-                src={photo.largeImageURL}
-                alt={photo.id}
-                onClick={this.props.onImageClick}
-              />
-            ))}
-          </ImagesGallery>
+          <div>
+            <ImagesGallery>
+              {fotos?.map(photo => (
+                <ImageGalleryItem
+                  key={photo.id}
+                  src={photo.largeImageURL}
+                  alt={photo.id}
+                  onClick={this.props.onImageClick}
+                />
+              ))}
+            </ImagesGallery>
+          </div>
+          <BtnContainer>
+            {fotos.length > 0 && status === 'resolved' && (
+              <Button onLoadMoreClick={this.loadMoreImages} />
+            )}
+          </BtnContainer>
         </div>
       );
     }
