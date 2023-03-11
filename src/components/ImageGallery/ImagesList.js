@@ -15,12 +15,19 @@ class ImageGallery extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
+    if (prevProps.searchValue !== this.props.searchValue) {
+      this.setState({ status: 'pending' });
+
+      getImages(this.props.searchValue.trim(), this.state.page)
+        .then(response => response.json())
+        .then(data => {
+          this.setState({ fotos: data.hits, status: 'resolved' });
+        });
+    }
     if (
       prevProps.searchValue !== this.props.searchValue ||
       prevState.page !== this.state.page
     ) {
-      this.setState({ status: 'pending' });
-
       getImages(this.props.searchValue.trim(), this.state.page)
         .then(response => response.json())
         .then(data => {
@@ -46,7 +53,7 @@ class ImageGallery extends Component {
     }
 
     if (status === 'rejected') {
-      return <h2>{error.message}</h2>;
+      return <h2>{error}</h2>;
     }
 
     if (status === 'resolved') {

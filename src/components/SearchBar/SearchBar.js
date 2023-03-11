@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { toast } from 'react-hot-toast';
 import {
   SearchBar,
   Form,
@@ -19,8 +20,9 @@ class Searchbar extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    if (this.state.searchValue.trim() === '') {
-      return alert('Enter something!');
+    if (!this.state.searchValue) {
+      toast.error('Enter something!');
+      return;
     }
     this.props.onSubmit(this.state.searchValue);
     this.setState({ searchValue: '' });

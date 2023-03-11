@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { GlobalStyle } from 'GlobalStyle';
 import { Layout } from './Layout';
+import { Toaster } from 'react-hot-toast';
 import ImageGallery from './ImageGallery/ImagesList';
 import Modal from './Modal';
 import SearchBar from './SearchBar';
@@ -8,7 +9,6 @@ import SearchBar from './SearchBar';
 class App extends Component {
   state = {
     searchValue: '',
-    page: 1,
     showModal: false,
     url: {
       srcLarge: '',
@@ -39,6 +39,12 @@ class App extends Component {
     return (
       <Layout>
         <GlobalStyle />
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 1500,
+          }}
+        />
         <SearchBar onSubmit={this.handleFormSubmit} />
         <ImageGallery
           searchValue={searchValue}
